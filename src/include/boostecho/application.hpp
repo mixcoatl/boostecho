@@ -10,21 +10,42 @@
 #define _BOOSTECHO_APPLICATION_HPP_
 
 #include <boostecho/boostecho.hpp>
+#include <boostecho/client.hpp>
+#include <boostecho/server.hpp>
 
 namespace boostecho {
 namespace core {
 
+// BoostEcho types.
+using client_type = boostecho::net::client;
+using server_type = boostecho::net::server;
+
 //! The application class. \{
 class application {
 public:
+    //! The type of an IO context.
+    typedef boost::asio::io_context io_context_type;
+
     //! Default constructor.
     application();
 
     //! Destructor.
     virtual ~application() noexcept;
 
-    //! Runs the application.
-    virtual void run();
+    //! Returns the client list.
+    std::list<client_type>& get_clients() noexcept {
+        return m_clients;
+    }
+
+    //! Returns the IO context.
+    io_context_type& get_io_context() noexcept {
+        return m_io_context;
+    }
+
+    //! Returns the server component.
+    server_type& get_server() noexcept {
+	return m_server;
+    }
 
     //! Returns the shutdown flag.
     //! \sa #set_shutdown(const bool)
@@ -39,6 +60,9 @@ public:
 	const int argc,
 	const char **argv);
 
+    //! Runs the application.
+    virtual void run();
+
     //! Sets the shutdown flag.
     //! \param p_shutdown the new shutdown flag value
     //! \sa #get_shutdown() const
@@ -47,6 +71,18 @@ public:
     }
 
 protected:
+    //! The IO context.
+    //! \sa #get_io_context()
+    io_context_type m_io_context;
+
+    //! The server component.
+    //! \sa #get_server()
+    server_type m_server;
+
+    //! The client list.
+    //! \sa #get_clients()
+    std::list<client_type> m_clients;
+
     //! The shutdown flag.
     //! \sa #get_shutdown() const
     //! \sa #set_shutdown(const bool)

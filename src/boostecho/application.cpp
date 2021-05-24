@@ -10,12 +10,17 @@
 
 #include <boostecho/application.hpp>
 #include <boostecho/boostecho.hpp>
+#include <boostecho/logger.hpp>
+#include <boostecho/server.hpp>
 
 namespace boostecho {
 namespace core {
 
 //! Default constructor.
 application::application() :
+	m_io_context(),
+	m_server(*this),
+	m_clients(),
 	m_shutdown(false) {
     // Nothing.
 }
@@ -36,7 +41,24 @@ void application::parse_arguments(
 
 //! Runs the application.
 void application::run() {
-    // Nothing.
+    // Configure server.
+    m_server.start_acceptor(6767);
+
+    // Now run event loop.
+    LOGGER_INFORMATION() << "Starting event loop.";
+    while (!m_shutdown) {
+	// The IO context stops when it runs out of
+	// work or when it services one its handlers.
+	// Restart the context just in case.
+	m_io_context.restart();
+
+	// Run the IO context.
+	if (!m_shutdown)
+	    m_io_context.run();
+    }
+
+    // We seem to be done for now.
+    LOGGER_INFORMATION() << "Application completed normally.";
 }
 
 }; // namespace core
