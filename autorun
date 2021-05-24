@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+# BoostEcho autorun script.
+#
+# \par Copyright
+# Copyright (C) 1999-2021 boostecho.org
+# All rights reserved.
+#
+# \author Geoffrey Davis <gdavis@boostecho.org>
+
+AutorunKillFile=".autorun.kill"
+while ( : ) do
+  ./bin/boostecho
+  if [ -r $AutorunKillFile ]; then
+    rm -f $AutorunKillFile
+    exit
+  fi
+  sleep 10
+done

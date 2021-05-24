@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# BoostEcho bootstrap script.
+# This script configures the build environment.
+#
+# \par Copyright
+# Copyright (C) 1999-2021 boostecho.org
+# All rights reserved.
+#
+# \author Geoffrey Davis <gdavis@boostecho.org>
+
+export AUTOM4TE="autom4te"
+export AUTOCONF="autoconf"
+
+case X${1}X in
+XcleanX)
+    for fname in \
+	aclocal.m4 ar-lib autom4te.cache bin/boostecho \
+	bin/boostecho.exe compile configure config.guess \
+	config.log config.status config.sub depcomp \
+	install-sh ltmain.sh libtool m4/libtool.m4 \
+	m4/ltoptions.m4 m4/ltsugar.m4 m4/ltversion.m4 \
+	m4/lt~obsolete.m4 missing mkinstalldirs \
+	src/include/config.hpp src/include/config.hpp.in \
+	src/include/config.hpp.in~ src/include/stamp-h1; do
+        test -f $fname && echo "Removing $fname."
+        rm -fr $fname
+    done
+    find . -name 'Makefile' -delete
+    find . -name 'Makefile.in' -delete
+    find . -name '.deps' -prune -exec rm -fr {} \;
+    find . -name '.dirstamp' -prune -exec rm -fr {} \;
+    find . -name '*.o' -prune -exec rm -fr {} \;
+    ;;
+
+XinitX)
+    set -x
+    aclocal -I m4
+    libtoolize --automake --copy --force
+    autoconf --force
+    autoheader
+    automake --add-missing --copy --foreign -Woverride
+    chmod +x configure
+    ./configure
+    ;;
+
+XX)
+    $0 init
+    ;;
+esac

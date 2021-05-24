@@ -1,0 +1,27 @@
+# log files
+log/*.log			text
+log/README			text
+
+# binaries
+bin/README			text
+bin/boostecho			binary
+bin/boostecho.exe		binary
+
+# data files
+data/README			text
+
+# m4 macro files
+m4/*.m4				text
+
+# scripts
+autorun				text
+bootstrap			text
+
+# build files
+configure.ac			text
+Makefile.am			text
+
+# source files
+src/include/boostecho/*.hpp	text
+src/boostecho/*.cpp		text
+src/boostecho/*.hpp		text

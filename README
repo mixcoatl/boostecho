@@ -1,0 +1,10 @@
+BoostEcho
+--------
+
+Welcome to BoostEcho v1.0!
+
+This is a rudimentary echo server implementation based on the boost ASIO
+library and other free and portable C++ libraries within the boost.org family.
+
+Geoffrey Davis
+contact@geoffreydavis.com
